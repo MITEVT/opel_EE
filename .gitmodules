@@ -1,0 +1,18 @@
+[submodule "opel_driver_interface"]
+	path = opel_driver_interface
+	url = https://github.com/MITEVT/opel_driver_interface.git
+[submodule "opel_motor_interface"]
+	path = opel_motor_interface
+	url = https://github.com/MITEVT/opel_motor_interface.git
+[submodule "opel_user_interface"]
+	path = opel_user_interface
+	url = https://github.com/MITEVT/opel_user_interface.git
+[submodule "lpc11cx4-library"]
+	path = lpc11cx4-library
+	url = https://github.com/MITEVT/lpc11cx4-library.git
+[submodule "opel_throttle_interface"]
+	path = opel_throttle_interface
+	url = https://github.com/MITEVT/opel_throttle_interface.git
+[submodule "opel_velocity_interface"]
+	path = opel_velocity_interface
+	url = https://github.com/MITEVT/opel_velocity_interface.git
