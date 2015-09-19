@@ -16,3 +16,6 @@
 [submodule "opel_velocity_interface"]
 	path = opel_velocity_interface
 	url = https://github.com/MITEVT/opel_velocity_interface.git
+[submodule "EVT_KICAD_LIBS"]
+	path = EVT_KICAD_LIBS
+	url = https://github.com/MITEVT/EVT_KICAD_LIBS.git
