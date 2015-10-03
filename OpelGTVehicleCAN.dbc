@@ -77,6 +77,8 @@ BO_ 1536 BMU_Heartbeat: 8 BMU
 
 
 
+EV_ test: 0 [0|0] "" 0 1 DUMMY_NODE_VECTOR0 Vector__XXX;
+
 CM_ SG_ 1783 bmu_precharge_state "0 = Error, 1 = Idle, 5 = Enable Pack, 2 = Measure, 3 = Precharge, 4 = Run";
 CM_ SG_ 1783 bmu_contactor_status_3 "0 = Off, 1 = On";
 CM_ SG_ 1783 bmu_contactor_err_3 "0 = OK, 1 = error";
