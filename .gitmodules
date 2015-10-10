@@ -19,6 +19,3 @@
 [submodule "EVT_KICAD_LIBS"]
 	path = EVT_KICAD_LIBS
 	url = https://github.com/MITEVT/EVT_KICAD_LIBS.git
-[submodule "OPEL_LPC11U_DEV_BOARD"]
-	path = OPEL_LPC11U_DEV_BOARD
-	url = ./OPEL_LPC11U_DEV_BOARD
