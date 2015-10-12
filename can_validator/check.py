@@ -2,7 +2,8 @@
 
 import argparse
 import re
-from collections import OrderedDict
+from datetime import datetime as dt
+import datetime
 
 def intb(intstr, reverse_endian=False):
     if intstr[0:2] == '0b':
@@ -31,6 +32,159 @@ def parse_frequency(freq_str):
         return num*pow(10,6)
     else:
         print 'Unrecognized unit during frequency parse with',freq_str
+
+class Message:
+
+    ''' Contains fields of a CAN message and a message timestamp'''
+    ''' NOTE: You cannot hash this because __eq__ is overwritten with non-unique function'''
+
+    def __init__(self, timestamp, can_id_str, can_format_str, data_str):
+        self.timestamp = timestamp
+        if can_id_str == "Form Error" or can_id_str == "Stuff Error":
+            self.error = True
+            self.can_id = None
+            self.can_format = None
+            self.data = None
+        else:
+            self.error = False
+            self.can_id = int('0x' + can_id_str, 16)
+            self.can_format = can_format_str
+            self.data = int('0x' + data_str, 16)
+
+    def __str__(self):
+        if self.error:
+            return '[Message: ' + dt.strftime(self.timestamp, '%H:%M:%S.%f') + ' ERROR]'
+        else:
+            return '[Message: ' + dt.strftime(self.timestamp, '%H:%M:%S.%f') + \
+                    ' ID:' + str(self.can_id) + ' Data:' + str(self.data) + ']'
+
+    def __eq__(self, other):
+        return self.error == other.error and self.can_id == other.can_id and self.data == other.data
+
+class InterpretedMessageBlock:
+    @staticmethod
+    def convertToInterpretedBlock(block):
+        pass
+
+    def __init__(self, start_timestamp, end_timestamp, error, id_symbol, data_symbols, num_messages):
+        self.start_timestamp = start_timestamp
+        self.end_timestamp = end_timestamp
+        self.id_symbol = id_symbol
+        self.data_symbols = data_symbols
+        self.num_messages = num_messages
+        self.error = error
+        
+
+    def __str__(self):
+        if self.error:
+            return '[MessageBlock: ' + dt.strftime(self.start_timestamp, '%H:%M:%S.%f') + '-' + dt.strftime(self.end_timestamp, '%H:%M:%S.%f') + ' COUNT:' + str(self.num_messages)  + ' ERROR]'
+        else:
+            return '[MessageBlock: ' + dt.strftime(self.start_timestamp, '%H:%M:%S.%f') + '-' + dt.strftime(self.end_timestamp, '%H:%M:%S.%f') + ' COUNT:' + str(self.num_messages)  + ' ID:' + hex(self.can_id) + ' Data:' + hex(self.data) + ']'
+
+
+class MessageBlock:
+    def __init__(self, start_timestamp, end_timestamp, error, can_id, data, num_messages):
+        self.start_timestamp = start_timestamp
+        self.end_timestamp = end_timestamp
+        self.can_id = can_id
+        self.data = data
+        self.num_messages = num_messages
+        self.error = error
+
+    def __str__(self):
+        if self.error:
+            return '[MessageBlock: ' + dt.strftime(self.start_timestamp, '%H:%M:%S.%f') + '-' + dt.strftime(self.end_timestamp, '%H:%M:%S.%f') + ' COUNT:' + str(self.num_messages)  + ' ERROR]'
+        else:
+            return '[MessageBlock: ' + dt.strftime(self.start_timestamp, '%H:%M:%S.%f') + '-' + dt.strftime(self.end_timestamp, '%H:%M:%S.%f') + ' COUNT:' + str(self.num_messages)  + ' ID:' + hex(self.can_id) + ' Data:' + hex(self.data) + ']'
+
+
+class Log:
+    ''' 
+        Parses the header of a MiniMon CSV CAN log eavesdrop
+        and saves data into object fields
+
+        Notes:
+            - self.baud_rate is in bits/second
+            - self.start_time and self.stop_time is a datetime object
+    '''
+    def __init__(self, header_lines):
+        self.minimon_log_format = header_lines[0]
+
+        date_str = header_lines[1].split(': ')[1].strip()
+        start_str = date_str + ' ' + header_lines[2].split(': ')[1].strip()
+        end_str = date_str + ' ' + header_lines[2].split(': ')[1].strip()
+
+        self.start_time = dt.strptime(start_str, '%m/%d/%Y %I:%M:%S %p')
+        self.stop_time = dt.strptime(end_str, '%m/%d/%Y %I:%M:%S %p')
+
+        self.error_frame_count = int(header_lines[4].split()[3])
+        self.overrun_count = int(header_lines[4].split()[1])
+
+        baud_parts = header_lines[5].split()
+        if baud_parts[2].startswith('kbit'):
+            self.baud_rate = int(baud_parts[1])*1000
+        elif baud_parts[2].startswith('mbit'):
+            self.baud_rate = int(baud_parts[1])*pow(10,6)
+        elif baud_parts[2].startswith('bit'):
+            self.baud_rate = int(baud_parts[1])
+
+        self.messages = []
+        self.message_blocks = []
+        self.interpreted_message_blocks = []
+
+    '''
+        Parses and saves a message line in the MiniMon log.
+        Time saved as datetime object, data and ID fields assumed to be hex
+        Format of message line assumed to be:
+        "Time","Identifier (hex)","Format","Flags","Data (hex)"
+    '''
+    def add_message_from_line(self, line):
+        line = re.sub(r"\"", "", line)
+        line_parts = line.split(',')
+        hours = int(line_parts[0].split(':')[0])
+        minutes = int(line_parts[0].split(':')[1])
+        seconds = int(line_parts[0].split(':')[2].split('.')[0])
+        milliseconds = int(line_parts[0].split(':')[2].split('.')[1])
+
+        # Check that the log is indeed timing to the millisecond
+        if len(line_parts[0].split(':')[2].split('.')[1]) > 3:
+            print 'Unexpected sub-second length. Expected three-digits of subsecond length. Line:\n' + line
+
+        timedelta = datetime.timedelta(hours=hours,minutes=minutes,seconds=seconds,milliseconds=milliseconds)
+
+        can_id_str = line_parts[1] # May contain error string; checked in Message constructor
+        format_str = line_parts[2]
+        data_str = line_parts[4]
+
+        message = Message(self.start_time + timedelta, can_id_str, format_str, data_str)
+        self.messages.append(message)
+
+    def summarize_messages(self):
+        if not self.messages: self.message_blocks = []
+        else:
+            curr_message = self.messages[0]
+            num_messages_in_block = 0
+            for message in self.messages:
+                if message == curr_message:
+                    num_messages_in_block += 1
+                else:
+                    message_block = MessageBlock(curr_message.timestamp, message.timestamp, curr_message.error, curr_message.can_id, curr_message.data, num_messages_in_block)
+                    num_messages_in_block = 0
+                    curr_message = message
+                    self.message_blocks.append(message_block)
+            
+            message_block = MessageBlock(curr_message.timestamp, self.messages[-1].timestamp, curr_message.error, curr_message.can_id, curr_message.data, num_messages_in_block)
+            self.message_blocks.append(message_block)
+
+    def interpret_blocks(self):
+        for block in self.message_blocks:
+            pass
+
+    def __str__(self):
+        self.summarize_messages()
+        return '[MiniMon Log: StartTime:' + dt.strftime(self.start_time,'%H:%M:%S.%f') + ' Messages:\n\t' + \
+                '\n\t'.join([str(message_block) for message_block in self.message_blocks]) + '\n]'
+        
 
 class DataSegment:
 
@@ -225,7 +379,7 @@ def parse_message_lines(lines):
     Given a valid specification returns a dictionary of valid MessageType objects
     mapping MessageType ID to the MessageType object
 '''
-def get_spec_structure(spec_file):
+def parse_spec_file(spec_file):
     filtered_lines = filter(lambda line: line[0] != '#' and line.strip() != '', spec_file.readlines())
 
     filtered_lines = [line.strip() for line in filtered_lines]
@@ -242,10 +396,31 @@ def get_spec_structure(spec_file):
 
     return message_types
 
+def parse_message_log(log_file):
+    lines = log_file.readlines()
+    header_end_index = 0
+    for i, line in enumerate(lines):
+        if line.startswith("\"Time"):
+            header_end_index = i
+    if header_end_index == 0:
+        print 'Problem parsing log! Does file have header?'
+    log = Log(lines[0:header_end_index])
+    for line in lines[header_end_index+1:]:
+        log.add_message_from_line(line)
+    
+    return log
 
+'''
+    Reads spec file, and validates it
+    For every message on MiniMon CSV CAN bus log:
+        Validates that message has valid ID, and valid data and returns the interpretation
+        Compresses the output so that the same message repeated multiple times in sequence occupies only one line, with time difference and frequency
+        Checks that message frequency constraints in the spec struct are maintained
+'''
 def check_log(spec_file, log_file):
-    spec_struct = get_spec_structure(spec_file)
-    pass
+    spec = parse_spec_file(spec_file)
+    log = parse_message_log(log_file)
+    print log
 
 '''
     Checks that:
@@ -295,7 +470,7 @@ if __name__ == "__main__":
     if args.validate_spec:
         validate_spec(args.validate_spec[0])
     elif args.check_log:
-        check_log(**args.check_log)
+        check_log(args.check_log[0], args.check_log[1])
     else:
         parser.print_help()
         sys.exit(2)
