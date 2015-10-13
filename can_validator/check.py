@@ -230,7 +230,6 @@ class Log:
         for message in self.messages:
             if message.error: continue
             if message.can_id in tracked_freqs:
-                print message.can_id, 'updated',message.timestamp
                 tracked_freqs[message.can_id] = tracked_freqs[message.can_id][0], message.timestamp
             for can_id, (delta, timestamp) in tracked_freqs.items():
                 if message.timestamp.second == 52:
