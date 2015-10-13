@@ -2,7 +2,7 @@
 # 
 # Notes:
 #   - Frequency accepts HZ (default), KHZ, or MHZ
-#   - Endianess is either LITTLE or BIG (default). Only specify LITTLE if the endianness of the values set here are opposite of the values in incoming messages (in which case the interpreter will flip the incoming bits).
+#   - Message endianess is either LITTLE or BIG (default). Only specify LITTLE if the endianness of the values set here are opposite of the values in incoming messages (in which case the interpreter will flip the incoming bits). NOT SUPPORTED (TALK WITH SKANDA IF YOU NEED THIS)
 #   - Non-value lines must start with MESSAGE_NAME or DATA_NAME
 #   - Any value, frequency, or position can be written as hex (0x1A), binary (0b10), or as an integer (23)
 #   - Bit positions for the data segments start index at 0 and go up to 63 (inclusive)

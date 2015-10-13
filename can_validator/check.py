@@ -33,6 +33,7 @@ def parse_frequency(freq_str):
     else:
         print 'Unrecognized unit during frequency parse with',freq_str
 
+
 class Message:
 
     ''' Contains fields of a CAN message and a message timestamp'''
@@ -51,6 +52,9 @@ class Message:
             self.can_format = can_format_str
             self.data = int('0x' + data_str, 16)
 
+    def interpret(self, spec):
+        pass
+
     def __str__(self):
         if self.error:
             return '[Message: ' + dt.strftime(self.timestamp, '%H:%M:%S.%f') + ' ERROR]'
@@ -61,11 +65,8 @@ class Message:
     def __eq__(self, other):
         return self.error == other.error and self.can_id == other.can_id and self.data == other.data
 
-class InterpretedMessageBlock:
-    @staticmethod
-    def convertToInterpretedBlock(block):
-        pass
 
+class InterpretedMessageBlock:
     def __init__(self, start_timestamp, end_timestamp, error, id_symbol, data_symbols, num_messages):
         self.start_timestamp = start_timestamp
         self.end_timestamp = end_timestamp
@@ -73,13 +74,17 @@ class InterpretedMessageBlock:
         self.data_symbols = data_symbols
         self.num_messages = num_messages
         self.error = error
-        
 
     def __str__(self):
-        if self.error:
-            return '[MessageBlock: ' + dt.strftime(self.start_timestamp, '%H:%M:%S.%f') + '-' + dt.strftime(self.end_timestamp, '%H:%M:%S.%f') + ' COUNT:' + str(self.num_messages)  + ' ERROR]'
+        if self.error is True:
+            return '[MessageBlock: ' + dt.strftime(self.start_timestamp, '%H:%M:%S.%f') + '-' + dt.strftime(self.end_timestamp, '%H:%M:%S.%f') + ' COUNT:' + str(self.num_messages)  + ' \n\t\tBUS READ ERROR\n\t]'
+        elif self.error and not self.id_symbol:
+            return '[MessageBlock: ' + dt.strftime(self.start_timestamp, '%H:%M:%S.%f') + '-' + dt.strftime(self.end_timestamp, '%H:%M:%S.%f') + ' COUNT:' + str(self.num_messages)  + ' \n\t\t' + self.error + '\n\t]'
+        elif self.error and self.id_symbol:
+            return '[MessageBlock: ' + dt.strftime(self.start_timestamp, '%H:%M:%S.%f') + '-' + dt.strftime(self.end_timestamp, '%H:%M:%S.%f') + ' COUNT:' + str(self.num_messages)  + ' \n\t\tID: ' + self.id_symbol + ' \n\t\t' + self.error + '\n\t]'
         else:
-            return '[MessageBlock: ' + dt.strftime(self.start_timestamp, '%H:%M:%S.%f') + '-' + dt.strftime(self.end_timestamp, '%H:%M:%S.%f') + ' COUNT:' + str(self.num_messages)  + ' ID:' + hex(self.can_id) + ' Data:' + hex(self.data) + ']'
+            return '[MessageBlock: ' + dt.strftime(self.start_timestamp, '%H:%M:%S.%f') + '-' + dt.strftime(self.end_timestamp, '%H:%M:%S.%f') + ' COUNT:' + str(self.num_messages)  + ' \n\t\tID:' + self.id_symbol + ' \n\t\tData:' + str(self.data_symbols) + '\n\t]'
+            
 
 
 class MessageBlock:
@@ -90,6 +95,28 @@ class MessageBlock:
         self.data = data
         self.num_messages = num_messages
         self.error = error
+
+    def symbolify(self, spec):
+        if self.error: return InterpretedMessageBlock(self.start_timestamp, self.end_timestamp, True, None, None, self.num_messages)
+
+        errors = ''
+        try:
+            message_type = spec[self.can_id]
+        except KeyError:
+            error = 'CAN ID {0} NOT IN SPECS'.format(hex(self.can_id))
+            return InterpretedMessageBlock(self.start_timestamp, self.end_timestamp, error, None, None,self.num_messages)
+
+        data_str = bin(self.data)[2:]
+        data_symbols = {}
+        for segment in message_type.segments:
+            data_part = int(data_str[segment.boundary[0]:segment.boundary[1]+1])
+            try:
+                data_symbols[segment.name] = segment.values[data_part]
+            except KeyError:
+                error = 'Data value {0} for {1} not adherent to spec.'.format(hex(data_part), segment.name)
+                return InterpretedMessageBlock(self.start_timestamp, self.end_timestamp, error, message_type.name, None,self.num_messages)
+        
+        return InterpretedMessageBlock(self.start_timestamp, self.end_timestamp, '', message_type.name, data_symbols, self.num_messages)
 
     def __str__(self):
         if self.error:
@@ -159,7 +186,9 @@ class Log:
         message = Message(self.start_time + timedelta, can_id_str, format_str, data_str)
         self.messages.append(message)
 
-    def summarize_messages(self):
+    ''' Assumes that Log has had messaged added to it '''
+    def compress(self):
+        if not self.messages: print 'Warning: messages have not been added to log'
         if not self.messages: self.message_blocks = []
         else:
             curr_message = self.messages[0]
@@ -169,25 +198,65 @@ class Log:
                     num_messages_in_block += 1
                 else:
                     message_block = MessageBlock(curr_message.timestamp, message.timestamp, curr_message.error, curr_message.can_id, curr_message.data, num_messages_in_block)
-                    num_messages_in_block = 0
+                    num_messages_in_block = 1
                     curr_message = message
                     self.message_blocks.append(message_block)
             
             message_block = MessageBlock(curr_message.timestamp, self.messages[-1].timestamp, curr_message.error, curr_message.can_id, curr_message.data, num_messages_in_block)
             self.message_blocks.append(message_block)
 
-    def interpret_blocks(self):
+    ''' Assumes that Log has been compressed '''
+    def symbolify(self, spec):
+        if not self.message_blocks: print 'Warning: log has not been compressed, or has no messages'
         for block in self.message_blocks:
-            pass
+            interpreted_block = block.symbolify(spec)
+            self.interpreted_message_blocks.append(interpreted_block)
+
+    '''Frequency analysis checks that messages that need to be sent periodically with certain frequency are being sent at atleast that rate. Ignores all 'Form Error' and 'Stuff Error' MiniMon read-outs that result from faulty UART connections'''
+    def check_freqs(self, spec):
+        print 'Checking frequency constraints...'
+        if not self.messages: return 'Warning: log has no messages. Cannot verify frequency contrainsts'
+        tracked_freqs = {}
+        for message in self.messages:
+            if not message.error:
+                first_message = message
+
+        problematic_ids = set() #contains set of can_id, and last updated
+        for can_id, message_type in spec.items():
+            if message_type.freq:
+                delta = datetime.timedelta(seconds=1/float(message_type.freq))
+                tracked_freqs[message_type.can_id] = delta, first_message.timestamp
+
+        for message in self.messages:
+            if message.error: continue
+            if message.can_id in tracked_freqs:
+                print message.can_id, 'updated',message.timestamp
+                tracked_freqs[message.can_id] = tracked_freqs[message.can_id][0], message.timestamp
+            for can_id, (delta, timestamp) in tracked_freqs.items():
+                if message.timestamp.second == 52:
+                    print timestamp, delta, delta+timestamp, message.timestamp, delta+timestamp < message.timestamp
+                if delta+timestamp < message.timestamp:
+                    problematic_ids.add((can_id,timestamp))
+                    del tracked_freqs[can_id]
+
+        errors = ''
+        for can_id, timestamp in problematic_ids:
+            if first_message.timestamp == timestamp:
+                errors += '{0} (CAN ID {1}) do not satisfy frequency constraints. Problematic time frame begins at the beginning of .'.format(spec[can_id].name, hex(can_id))
+            else:
+                errors += '{0} (CAN ID {1}) do not satisfy frequency constraints:\nProblematic time frame starts at {2}.\n'.format(spec[can_id].name, hex(can_id), str(timestamp - self.start_time))
+                
+
+        return errors
+        
 
     def __str__(self):
-        self.summarize_messages()
+        if not self.interpreted_message_blocks: print 'Warning: log has not been symbolified, or has no messages'
         return '[MiniMon Log: StartTime:' + dt.strftime(self.start_time,'%H:%M:%S.%f') + ' Messages:\n\t' + \
-                '\n\t'.join([str(message_block) for message_block in self.message_blocks]) + '\n]'
+                '\n\t'.join([str(message_block) for message_block in self.interpreted_message_blocks]) + '\n]'
         
 
 class DataSegment:
-
     def __init__(self, name, boundary):
         self.boundary = boundary
         self.name = name
@@ -228,9 +297,6 @@ class DataSegment:
 
         if errors: return errors, False
         else: return '', True
-
-    def interpret_data(self, data):
-        pass
 
     def __str__(self):
         out = 'DATA_NAME=' + self.name + ' POSITION=' + str(self.boundary) + '\n\t'
@@ -295,9 +361,6 @@ class MessageType:
                 names.add(segment.name)
 
         return errors, errors_present
-
-    def interpret_data(self, data):
-        pass
 
     def __str__(self):
         out = 'MESSAGE_NAME=' + self.name + ' ID=' + str(self.can_id) + ' ENDIAN=' + self.endian + ' FREQ=' + str(self.freq) + '\n\t'
@@ -375,11 +438,13 @@ def parse_message_lines(lines):
 
     return message_type
 
+
 '''
     Given a valid specification returns a dictionary of valid MessageType objects
     mapping MessageType ID to the MessageType object
 '''
 def parse_spec_file(spec_file):
+    spec_file.seek(0)
     filtered_lines = filter(lambda line: line[0] != '#' and line.strip() != '', spec_file.readlines())
 
     filtered_lines = [line.strip() for line in filtered_lines]
@@ -397,6 +462,7 @@ def parse_spec_file(spec_file):
     return message_types
 
 def parse_message_log(log_file):
+    log_file.seek(0)
     lines = log_file.readlines()
     header_end_index = 0
     for i, line in enumerate(lines):
@@ -410,6 +476,7 @@ def parse_message_log(log_file):
     
     return log
 
+
 '''
     Reads spec file, and validates it
     For every message on MiniMon CSV CAN bus log:
@@ -420,7 +487,10 @@ def parse_message_log(log_file):
 def check_log(spec_file, log_file):
     spec = parse_spec_file(spec_file)
     log = parse_message_log(log_file)
-    print log
+    log.compress()
+    log.symbolify(spec)
+    errors = log.check_freqs(spec)
+    return log, errors
 
 '''
     Checks that:
@@ -428,7 +498,7 @@ def check_log(spec_file, log_file):
         - MessageType and DataSegment objects are valid (see validation methods in DataSegment and MessageType)
 '''
 def validate_spec(spec_file):
-    message_types = get_spec_structure(spec_file)
+    message_types = parse_spec_file(spec_file)
 
     errors_present = False
     errors = ''
@@ -453,11 +523,9 @@ def validate_spec(spec_file):
             ids.add(message_type.can_id)
 
     if errors_present:
-        print 'Errors present!\n' + errors
-        return False
+        return 'Errors present!\n' + errors
     else:
-        print 'No errors in specfication file %s!' % spec_file.name
-        return True
+        return 'No errors in specfication file %s!' % spec_file.name
 
 
 if __name__ == "__main__":
@@ -468,9 +536,19 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if args.validate_spec:
-        validate_spec(args.validate_spec[0])
+        errors = validate_spec(args.validate_spec[0])
+        args.validate_spec[0].close()
+        print errors
     elif args.check_log:
-        check_log(args.check_log[0], args.check_log[1])
+        print 'First validating spec file...'
+        validate_spec(args.check_log[0])
+        print 'Reading and interpreting log...'
+        log, errors = check_log(args.check_log[0], args.check_log[1])
+        args.check_log[0].close()
+        args.check_log[1].close()
+        print log
+        if errors: print 'FREQUENCY CONSTRAIN ERRORS:\n', errors
+        else: print 'No frequency contraints violated!'
     else:
         parser.print_help()
         sys.exit(2)
