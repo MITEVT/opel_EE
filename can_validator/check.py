@@ -277,8 +277,8 @@ class DataSegment:
         if not self.name or not self.boundary:
             print 'No name or boundary defined for segment' + str(self.name) +' '+ str(self.boundary)
             sys.exit(1)
-        if not self.boundary[0] > -1 and self.boundary[1] < 64 and self.boundary[0] <= self.boundary[1]:
-            errors += 'Boundary checks failed for ' + str(name) + '\n'
+        if not (self.boundary[0] > -1 and self.boundary[1] < 64 and self.boundary[0] <= self.boundary[1]):
+            errors += 'Boundary checks failed for ' + str(self.name) + '\n'
 
         boundary_size = self.boundary[1] - self.boundary[0] + 1
 
@@ -294,8 +294,8 @@ class DataSegment:
         if len(set(self.values.values())) < len(self.values.values()):
             errors += "Duplicate value identifiers detected in data segment %s" % self.name
 
-        if errors: return errors, False
-        else: return '', True
+        if errors: return errors, True
+        else: return '', False
 
     def __str__(self):
         out = 'DATA_NAME=' + self.name + ' POSITION=' + str(self.boundary) + '\n\t'
@@ -358,6 +358,7 @@ class MessageType:
                 errors_present = True
             else:
                 names.add(segment.name)
+
 
         return errors, errors_present
 
@@ -540,7 +541,8 @@ if __name__ == "__main__":
         print errors
     elif args.check_log:
         print 'First validating spec file...'
-        validate_spec(args.check_log[0])
+        errors = validate_spec(args.check_log[0])
+        print errors
         print 'Reading and interpreting log...'
         log, errors = check_log(args.check_log[0], args.check_log[1])
         args.check_log[0].close()
