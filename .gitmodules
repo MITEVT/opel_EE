@@ -22,3 +22,6 @@
 [submodule "opel_11U_devboard"]
 	path = opel_11U_devboard
 	url = https://github.com/MITEVT/opel_11U_devboard.git
+[submodule "can_validator"]
+	path = can_validator
+	url = https://github.com/MITEVT/can_validator
