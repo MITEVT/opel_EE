@@ -25,3 +25,6 @@
 [submodule "can_validator"]
 	path = can_validator
 	url = https://github.com/MITEVT/can_validator
+[submodule "opel_power_distribution_monitor"]
+	path = opel_power_distribution_monitor
+	url = https://github.com/MITEVT/opel_power_distribution_monitor.git
