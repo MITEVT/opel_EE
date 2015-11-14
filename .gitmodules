@@ -28,3 +28,6 @@
 [submodule "opel_fusebox"]
 	path = opel_fusebox
 	url = https://github.com/MITEVT/opel_fusebox.git
+[submodule "opel_power_distribution_monitor"]
+	path = opel_power_distribution_monitor
+	url = https://github.com/MITEVT/opel_power_distribution_monitor.git
