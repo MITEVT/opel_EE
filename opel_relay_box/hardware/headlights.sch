@@ -1,0 +1,256 @@
+EESchema Schematic File Version 2
+LIBS:power
+LIBS:device
+LIBS:transistors
+LIBS:conn
+LIBS:linear
+LIBS:regul
+LIBS:74xx
+LIBS:cmos4000
+LIBS:adc-dac
+LIBS:memory
+LIBS:xilinx
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
+LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
+LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
+EELAYER 25 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 2 6
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L R95−160 K1
+U 1 1 57001530
+P 3150 3800
+F 0 "K1" H 2950 4350 60  0000 C CNN
+F 1 "R95−160" H 3200 3800 60  0000 C CNN
+F 2 "" H 3200 3800 60  0001 C CNN
+F 3 "" H 3200 3800 60  0000 C CNN
+	1    3150 3800
+	1    0    0    -1  
+$EndComp
+$Comp
+L R95−160 K2
+U 1 1 57001558
+P 5300 3800
+F 0 "K2" H 5100 4350 60  0000 C CNN
+F 1 "R95−160" H 5350 3800 60  0000 C CNN
+F 2 "" H 5350 3800 60  0001 C CNN
+F 3 "" H 5350 3800 60  0000 C CNN
+	1    5300 3800
+	1    0    0    -1  
+$EndComp
+$Comp
+L TEST_1P W1
+U 1 1 57001CE5
+P 4050 1950
+F 0 "W1" H 4050 2220 50  0000 C CNN
+F 1 "TEST_1P" H 4050 2150 50  0000 C CNN
+F 2 "Wire_Pads:SolderWirePad_2x_2-5mmDrill" H 4250 1950 50  0001 C CNN
+F 3 "" H 4250 1950 50  0000 C CNN
+	1    4050 1950
+	1    0    0    -1  
+$EndComp
+$Comp
+L TEST_1P W2
+U 1 1 5700207B
+P 4450 1950
+F 0 "W2" H 4450 2220 50  0000 C CNN
+F 1 "TEST_1P" H 4450 2150 50  0000 C CNN
+F 2 "Wire_Pads:SolderWirePad_2x_2-5mmDrill" H 4650 1950 50  0001 C CNN
+F 3 "" H 4650 1950 50  0000 C CNN
+	1    4450 1950
+	1    0    0    -1  
+$EndComp
+$Comp
+L TEST_1P W3
+U 1 1 57002098
+P 4850 1950
+F 0 "W3" H 4850 2220 50  0000 C CNN
+F 1 "TEST_1P" H 4850 2150 50  0000 C CNN
+F 2 "Wire_Pads:SolderWirePad_2x_2-5mmDrill" H 5050 1950 50  0001 C CNN
+F 3 "" H 5050 1950 50  0000 C CNN
+	1    4850 1950
+	1    0    0    -1  
+$EndComp
+$Comp
+L TEST_1P W4
+U 1 1 570020F9
+P 5700 1950
+F 0 "W4" H 5700 2220 50  0000 C CNN
+F 1 "TEST_1P" H 5700 2150 50  0000 C CNN
+F 2 "Wire_Pads:SolderWirePad_2x_2-5mmDrill" H 5900 1950 50  0001 C CNN
+F 3 "" H 5900 1950 50  0000 C CNN
+	1    5700 1950
+	1    0    0    -1  
+$EndComp
+$Comp
+L TEST_1P W5
+U 1 1 570020FF
+P 6100 1950
+F 0 "W5" H 6100 2220 50  0000 C CNN
+F 1 "TEST_1P" H 6100 2150 50  0000 C CNN
+F 2 "Wire_Pads:SolderWirePad_2x_2-5mmDrill" H 6300 1950 50  0001 C CNN
+F 3 "" H 6300 1950 50  0000 C CNN
+	1    6100 1950
+	1    0    0    -1  
+$EndComp
+$Comp
+L TEST_1P W6
+U 1 1 57002105
+P 6500 1950
+F 0 "W6" H 6500 2220 50  0000 C CNN
+F 1 "TEST_1P" H 6500 2150 50  0000 C CNN
+F 2 "Wire_Pads:SolderWirePad_2x_2-5mmDrill" H 6700 1950 50  0001 C CNN
+F 3 "" H 6700 1950 50  0000 C CNN
+	1    6500 1950
+	1    0    0    -1  
+$EndComp
+NoConn ~ 3350 3150
+NoConn ~ 5500 3150
+$Comp
+L GND #PWR1
+U 1 1 57002AC6
+P 4450 4950
+F 0 "#PWR1" H 4450 4700 50  0001 C CNN
+F 1 "GND" H 4450 4800 50  0000 C CNN
+F 2 "" H 4450 4950 50  0000 C CNN
+F 3 "" H 4450 4950 50  0000 C CNN
+	1    4450 4950
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2750 3150 2750 2950
+Wire Wire Line
+	2750 2950 2150 2950
+Wire Wire Line
+	2150 2950 2150 5400
+Wire Wire Line
+	2150 5400 4150 5400
+Wire Wire Line
+	4350 5400 6300 5400
+Wire Wire Line
+	6300 5400 6300 2950
+Wire Wire Line
+	4900 2950 4900 3150
+Wire Wire Line
+	4250 6000 4250 6250
+Wire Wire Line
+	7750 6250 4250 6250
+Wire Wire Line
+	2750 4450 2750 4800
+Wire Wire Line
+	2750 4800 4900 4800
+Wire Wire Line
+	4900 4800 4900 4450
+Wire Wire Line
+	3550 3150 3550 2250
+Wire Wire Line
+	3550 2250 5700 2250
+Wire Wire Line
+	4050 2250 4050 1950
+Wire Wire Line
+	5700 2250 5700 1950
+Connection ~ 4050 2250
+Wire Wire Line
+	4850 1950 4850 2350
+Wire Wire Line
+	4850 2350 6500 2350
+Wire Wire Line
+	6500 2350 6500 1950
+Wire Wire Line
+	5700 3150 5700 2350
+Connection ~ 5700 2350
+Wire Wire Line
+	3450 4450 3450 4600
+Wire Wire Line
+	3450 4600 7750 4600
+Wire Wire Line
+	5600 4600 5600 4450
+Wire Wire Line
+	6100 1950 6100 2550
+Wire Wire Line
+	6100 2550 4450 2550
+Wire Wire Line
+	4450 1950 4450 4950
+Connection ~ 4450 4800
+Connection ~ 4450 2550
+Wire Wire Line
+	7750 3550 7750 6250
+$Comp
+L +12V #PWR2
+U 1 1 57002BFA
+P 7750 1900
+F 0 "#PWR2" H 7750 1750 50  0001 C CNN
+F 1 "+12V" H 7750 2040 50  0000 C CNN
+F 2 "" H 7750 1900 50  0000 C CNN
+F 3 "" H 7750 1900 50  0000 C CNN
+	1    7750 1900
+	1    0    0    -1  
+$EndComp
+$Comp
+L SP3T SW1
+U 1 1 57002D26
+P 4250 5700
+F 0 "SW1" H 4150 5850 50  0000 C CNN
+F 1 "SP3T" H 4150 5600 50  0000 C CNN
+F 2 "" H 3625 5875 50  0000 C CNN
+F 3 "" H 3625 5875 50  0000 C CNN
+	1    4250 5700
+	0    -1   -1   0   
+$EndComp
+NoConn ~ 4250 5400
+Wire Wire Line
+	6300 2950 4900 2950
+Connection ~ 7750 4600
+Connection ~ 5600 4600
+Text Label 4050 1950 0    60   ~ 0
+LB1
+Text Label 4450 1950 0    60   ~ 0
+G1
+Text Label 4850 1950 0    60   ~ 0
+HB1
+Text Label 5700 1950 0    60   ~ 0
+LB2
+Text Label 6100 1950 0    60   ~ 0
+G2
+Text Label 6500 1950 0    60   ~ 0
+HB2
+$Comp
+L FUSE F1
+U 1 1 570033C9
+P 7750 3300
+F 0 "F1" H 7850 3350 50  0000 C CNN
+F 1 "FUSE" H 7650 3250 50  0000 C CNN
+F 2 "" H 7750 3300 50  0000 C CNN
+F 3 "" H 7750 3300 50  0000 C CNN
+	1    7750 3300
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	7750 1900 7750 3050
+$EndSCHEMATC
