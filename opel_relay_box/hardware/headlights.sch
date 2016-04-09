@@ -28,6 +28,7 @@ LIBS:opto
 LIBS:atmel
 LIBS:contrib
 LIBS:valves
+LIBS:opel_relay_box-cache
 EELAYER 25 0
 EELAYER END
 $Descr A4 11693 8268
@@ -160,7 +161,7 @@ Wire Wire Line
 Wire Wire Line
 	4250 6000 4250 6250
 Wire Wire Line
-	7750 6250 4250 6250
+	4250 6250 7750 6250
 Wire Wire Line
 	2750 4450 2750 4800
 Wire Wire Line
@@ -200,7 +201,7 @@ Wire Wire Line
 Connection ~ 4450 4800
 Connection ~ 4450 2550
 Wire Wire Line
-	7750 3550 7750 6250
+	7750 6250 7750 3550
 $Comp
 L +12V #PWR2
 U 1 1 57002BFA
