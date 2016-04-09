@@ -44,31 +44,31 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Sheet
-S 4400 3150 1350 1100
+S 2950 2850 1350 1100
 U 56FFF727
 F0 "Headlights" 60
 F1 "headlights.sch" 60
 $EndSheet
 $Sheet
-S 6700 3100 1350 1050
+S 5250 2850 1350 1050
 U 56FFF763
 F0 "Brake" 60
 F1 "brake.sch" 60
 $EndSheet
 $Sheet
-S 9000 3200 1300 1000
+S 7550 2900 1300 1000
 U 56FFF784
 F0 "Turn Signals" 60
 F1 "turn-signals.sch" 60
 $EndSheet
 $Sheet
-S 4400 4900 1300 950 
+S 2950 4600 1300 950 
 U 56FFF7AB
 F0 "Reverse Light" 60
 F1 "reverse-light.sch" 60
 $EndSheet
 $Sheet
-S 6650 4850 1400 950 
+S 5200 4600 1400 950 
 U 56FFF7BF
 F0 "Windshield Wiper Motor" 60
 F1 "windshield-wiper-motor.sch" 60
