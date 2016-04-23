@@ -1,4 +1,4 @@
-update=Saturday, April 09, 2016 'PMt' 12:32:52 PM
+update=Saturday, April 23, 2016 'PMt' 01:53:37 PM
 version=1
 last_client=kicad
 [pcbnew]
@@ -58,3 +58,11 @@ LibName26=opto
 LibName27=atmel
 LibName28=contrib
 LibName29=valves
+LibName30=MITEVT_ANALOG
+LibName31=MITEVT_CONTACTORS
+LibName32=MITEVT_interface
+LibName33=MITEVT_mcontrollers
+LibName34=MITEVT_OPTO
+LibName35=MITEVT_power
+LibName36=MITEVT_REG
+LibName37=MITEVT_relay
