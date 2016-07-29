@@ -35,64 +35,88 @@ int8_t BQ7695_read_offset_corr(uint8_t vc){
 	else if(vc < 3){
 		BQ7695_Read(I2C_ADDRESS_VC_CAL_EXT_1,rx_buf);
 		if(vc == 1){
-			offset |= (rx_buf[0] & I2C_MASK_VC_CAL_EXT_1_VC1_OC_4) << 3;
+			offset |= (rx_buf[0] & I2C_MASK_VC_CAL_EXT_1_VC1_OC_4) >> 3;
 		}
 		else if(vc == 2){
-			offset |= (rx_buf[0] & I2C_MASK_VC_CAL_EXT_1_VC2_OC_4) << 3;
+			offset |= (rx_buf[0] & I2C_MASK_VC_CAL_EXT_1_VC2_OC_4) >> 1;
 		}
 	}
 	else{
 		BQ7695_Read(I2C_ADDRESS_VREF_CAL_EXT, rx_buf);
 		if(vc == 3){
-			offset |= (rx_buf[0] & I2C_MASK_VC_CAL_EXT_2_VC3_OC_4) << 3;
+			offset |= (rx_buf[0] & I2C_MASK_VC_CAL_EXT_2_VC3_OC_4) >> 3;
 		}
 		else if(vc==4){
-			offset |= (rx_buf[0] & I2C_MASK_VC_CAL_EXT_2_VC4_OC_4) << 3;
+			offset |= (rx_buf[0] & I2C_MASK_VC_CAL_EXT_2_VC4_OC_4) >> 1;
 		}
 		else if(vc==5){
-			offset |= (rx_buf[0] & I2C_MASK_VC_CAL_EXT_2_VC5_OC_4) << 3;
+			offset |= (rx_buf[0] & I2C_MASK_VC_CAL_EXT_2_VC5_OC_4) << 1;
 		}
 		else if(vc==6){
 			offset |= (rx_buf[0] & I2C_MASK_VC_CAL_EXT_2_VC6_OC_4) << 3;
 		}
 
 	}
+	if(vc == 0){
+		if(offset & 0x20){	// Convert the 6 bit two's complement
+			sOffset = -1*(0x20-(offset & 0x1F))
+		}
+		else{
+			sOffset = offset;
+		}
+	
+	}
+	else{
+		if(offset & 0x10){	// Convert the 5 bit two's complement
+			sOffset = -1*(0x10-(offset & 0x0F))
+		}
+		else{
+			sOffset = offset;
+		}
+	}
 	return offset;
 }
 
 int8_t BQ7695_read_gain_corr(uint8_t vc){
 	uint8_t gain = 0;
+	int8_t sGain = 0;
 	BQ7695_Read(I2C_ADDRESS_VREF_CAL + vc,rx_buf); // lower bits
 	gain = rx_buf[0];
 	if(vc == 0){
 		BQ7695_Read(I2C_ADDRESS_VREF_CAL_EXT, rx_buf);
-		gain |= (rx_buf[0] & I2C_MASK_VREF_CAL_EXT_VREF_GC_4)<< 3;
+		gain |= (rx_buf[0] & I2C_MASK_VREF_CAL_EXT_VREF_GC_4) << 4;
 	}
 	else if(vc < 3){
 		BQ7695_Read(I2C_ADDRESS_VC_CAL_EXT_1,rx_buf);
 		if(vc == 1){
-			gain |= (rx_buf[0] & I2C_MASK_VC_CAL_EXT_1_VC1_GC_4) << 3;
+			gain |= (rx_buf[0] & I2C_MASK_VC_CAL_EXT_1_VC1_GC_4) >> 2;
 		}
 		else if(vc == 2){
-			gain |= (rx_buf[0] & I2C_MASK_VC_CAL_EXT_1_VC2_GC_4) << 3;
+			gain |= (rx_buf[0] & I2C_MASK_VC_CAL_EXT_1_VC2_GC_4);
 		}
 	}
 	else{
 		BQ7695_Read(I2C_ADDRESS_VREF_CAL_EXT, rx_buf);
 		if(vc == 3){
-			gain |= (rx_buf[0] & I2C_MASK_VC_CAL_EXT_2_VC3_GC_4) << 3;
+			gain |= (rx_buf[0] & I2C_MASK_VC_CAL_EXT_2_VC3_GC_4) >> 2;
 		}
 		else if(vc==4){
-			gain |= (rx_buf[0] & I2C_MASK_VC_CAL_EXT_2_VC4_GC_4) << 3;
+			gain |= (rx_buf[0] & I2C_MASK_VC_CAL_EXT_2_VC4_GC_4);
 		}
 		else if(vc==5){
-			gain |= (rx_buf[0] & I2C_MASK_VC_CAL_EXT_2_VC5_GC_4) << 3;
+			gain |= (rx_buf[0] & I2C_MASK_VC_CAL_EXT_2_VC5_GC_4) << 2;
 		}
 		else if(vc==6){
-			gain |= (rx_buf[0] & I2C_MASK_VC_CAL_EXT_2_VC6_GC_4) << 3;
+			gain |= (rx_buf[0] & I2C_MASK_VC_CAL_EXT_2_VC6_GC_4) << 4;
 		}
 	}
-	return gain;
+	if(gain & 0x10){	// Convert the 5 bit two's complement
+		sGain = -1*(0x10-(gain & 0x0F))
+	}
+	else{
+		sGain = gain;
+	}
+	return sGain;
 }
 
 uint8_t BQ7695_read_status(){
