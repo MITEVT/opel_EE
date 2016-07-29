@@ -26,6 +26,7 @@ uint8_t BQ7695_disable_unecessary(){
 
 int8_t BQ7695_read_offset_corr(uint8_t vc){
 	uint8_t offset = 0;
+	int8_t sOffset = 0;
 	BQ7695_Read(I2C_ADDRESS_VREF_CAL + vc,rx_buf); // lower bits
 	offset = rx_buf[0];
 	if(vc == 0){
@@ -59,7 +60,7 @@ int8_t BQ7695_read_offset_corr(uint8_t vc){
 	}
 	if(vc == 0){
 		if(offset & 0x20){	// Convert the 6 bit two's complement
-			sOffset = -1*(0x20-(offset & 0x1F))
+			sOffset = -1*(0x20-(offset & 0x1F));
 		}
 		else{
 			sOffset = offset;
@@ -68,13 +69,13 @@ int8_t BQ7695_read_offset_corr(uint8_t vc){
 	}
 	else{
 		if(offset & 0x10){	// Convert the 5 bit two's complement
-			sOffset = -1*(0x10-(offset & 0x0F))
+			sOffset = -1*(0x10-(offset & 0x0F));
 		}
 		else{
 			sOffset = offset;
 		}
 	}
-	return offset;
+	return sOffset;
 }
 
 int8_t BQ7695_read_gain_corr(uint8_t vc){
@@ -111,7 +112,7 @@ int8_t BQ7695_read_gain_corr(uint8_t vc){
 		}
 	}
 	if(gain & 0x10){	// Convert the 5 bit two's complement
-		sGain = -1*(0x10-(gain & 0x0F))
+		sGain = -1*(0x10-(gain & 0x0F));
 	}
 	else{
 		sGain = gain;
