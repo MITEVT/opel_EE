@@ -131,14 +131,15 @@ bool BQ7695_over_current(){
 }
 
 static inline void readCell(uint16_t *cell){
+	
 	Chip_ADC_SetStartMode(LPC_ADC, ADC_START_NOW, ADC_TRIGGERMODE_RISING);
-	while (!Chip_ADC_ReadStatus(LPC_ADC, ADC_CH0, ADC_DR_DONE_STAT));	
-	Chip_ADC_ReadValue(LPC_ADC, ADC_CH0, cell);
+	while (!Chip_ADC_ReadStatus(LPC_ADC, ADC_CH5, ADC_DR_DONE_STAT));	
+	Chip_ADC_ReadValue(LPC_ADC, ADC_CH5, cell);
 }
 
 void BQ7695_read_cells(uint16_t *cells){
 	uint8_t i = 0;
-	while(i<8){
+	while(i<7){
 		BQ7695_set_cell(++i);		
 		readCell(&(cells[i]));		
 	}
@@ -146,6 +147,15 @@ void BQ7695_read_cells(uint16_t *cells){
 
 void BQ7695_read_current(uint16_t *current){
 	Chip_ADC_SetStartMode(LPC_ADC, ADC_START_NOW, ADC_TRIGGERMODE_RISING);
-	while (!Chip_ADC_ReadStatus(LPC_ADC, ADC_CH1, ADC_DR_DONE_STAT));	
-	Chip_ADC_ReadValue(LPC_ADC, ADC_CH1, current);
+	while (!Chip_ADC_ReadStatus(LPC_ADC, ADC_CH4, ADC_DR_DONE_STAT));	
+	Chip_ADC_ReadValue(LPC_ADC, ADC_CH4, current);
+}
+
+void BQ7695_setup_corrections(int8_t *gc, int8_t *oc){
+	uint8_t i =0;
+	while(i<8){
+		gc[i] = BQ7695_read_gain_corr(i);
+		oc[i] = BQ7695_read_offset_corr(i);
+		i++;
+	}
 }

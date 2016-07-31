@@ -142,10 +142,10 @@ void Board_I2C_Init(void){
 
 void Board_ADC_Init(void){
 
-	Chip_IOCON_PinMuxSet(LPC_IOCON, IOCON_PIO0_11, FUNC2);
-	Chip_IOCON_PinMuxSet(LPC_IOCON, IOCON_PIO1_0, FUNC2);
+	Chip_IOCON_PinMuxSet(LPC_IOCON, IOCON_PIO1_4, FUNC1);
+//	Chip_IOCON_PinMuxSet(LPC_IOCON, IOCON_PIO1_3, FUNC2);
 
 	Chip_ADC_Init(LPC_ADC, &adc_setup);
-	Chip_ADC_EnableChannel(LPC_ADC, ADC_CH0, ENABLE);
-	Chip_ADC_EnableChannel(LPC_ADC, ADC_CH1, ENABLE);	
+//	Chip_ADC_EnableChannel(LPC_ADC, ADC_CH4, ENABLE);
+	Chip_ADC_EnableChannel(LPC_ADC, ADC_CH5, ENABLE);	
 }

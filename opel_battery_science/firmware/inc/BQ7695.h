@@ -127,8 +127,8 @@
 
 //---------------------------------------------------
 // Helper macros for I2C with this chip
-#define BQ7695_Read(addr, buff)		Chip_I2C_MasterCmdRead(I2C0, I2C_ADDRESS_DEVICE,addr,buff,1)
-#define BQ7695_Write(addr, buff)	Chip_I2C_MasterSend(I2C0, (I2C_ADDRESS_DEVICE<<3)|addr,buff,1) 
+#define BQ7695_Read(addr, buff)		Chip_I2C_MasterRead(I2C0, ((I2C_ADDRESS_DEVICE<<3)|(addr)),buff,1)
+#define BQ7695_Write(addr, buff)	Chip_I2C_MasterSend(I2C0, ((I2C_ADDRESS_DEVICE<<3)|(addr)),buff,1) 
 
 //----------------------------------------------------
 // Helpful project relevent functions
@@ -162,5 +162,8 @@ void BQ7695_read_cells(uint16_t *cells);
 
 // Reads the current and stores it
 void BQ7695_read_current(uint16_t *current);
+
+// Record all of the correction factors
+void BQ7695_setup_corrections(int8_t *gc, int8_t *oc);
 
 #endif

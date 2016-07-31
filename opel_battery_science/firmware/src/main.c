@@ -24,6 +24,9 @@ static uint8_t uart_rx_buffer[BUFFER_SIZE]; 	// UART received message buffer
 
 static uint32_t lastPrint;
 static uint16_t cellVolts[8];
+static uint8_t data[10];
+static int8_t gc[7];
+static int8_t oc[7];
 
 // -------------------------------------------------------------
 // Helper Functions
@@ -38,13 +41,14 @@ void _delay(uint32_t ms) {
 }
 
 static inline void print_cells(void){
-	uint8_t i = 0;
+	uint8_t i = 1;
 	while(i<7){
 		Board_UART_Print("[Cell Voltage ");
 		Board_UART_PrintNum(i,10,false);
 		Board_UART_Print(": ");
-		Board_UART_PrintNum(cellVolts[i++],10,false);
-		Board_UART_Println(" Volts]");
+//		Board_UART_PrintNum(((((3.3*cellVolts[i++]*1000)/1023)+oc[i])*(1+gc[i]))/gc[i],10,false);
+		Board_UART_PrintNum(3.3*cellVolts[i++]*1000/512, 10, false);
+		Board_UART_Println("]");
 	}
 }
 // -------------------------------------------------------------
@@ -70,7 +74,11 @@ int main(void)
 	// Initialize UART Communication
 	Board_UART_Init(UART_BAUD_RATE);
 	Board_UART_Println("Started up");
-
+	Board_UART_PrintNum(&msTicks,16,true);
+	int i=0;	
+	while(i<8){
+		Board_UART_PrintNum(&(cellVolts[i++]),16,true);
+	}
 	//---------------
 	// Initialize SysTick Timer to generate millisecond count
 	if (Board_SysTick_Init()) {
@@ -90,21 +98,34 @@ int main(void)
 	Board_I2C_Init();
 	Board_ADC_Init();
 	
-	BQ7695_disable_unecessary();
+	BQ7695_disable_unecessary();	
+	BQ7695_setup_corrections(gc,oc);
 
+	i = 0;
+	while(i<8){
+		Board_UART_PrintNum(gc[i],10,true);
+		Board_UART_PrintNum(oc[i++],10,true);
+	}
+
+	msTicks = 1000;
 	lastPrint = msTicks;
 
 	while (1) {
 
-		if(lastPrint < msTicks-100){
+		if(lastPrint < msTicks-1000){
 			lastPrint = msTicks;
 			BQ7695_read_cells(cellVolts);	
+			Board_UART_PrintNum(msTicks,10,true);
 			print_cells();
 		}
 		uint8_t count;
 		if ((count = Board_UART_Read(uart_rx_buffer, BUFFER_SIZE)) != 0) {
 			Board_UART_SendBlocking(uart_rx_buffer, count); // Echo user input
 			switch (uart_rx_buffer[0]) {
+				case 'a':
+
+
+					break;
 				default:
 					Board_UART_Println("Invalid Command");
 					break;
