@@ -154,7 +154,7 @@ void BQ7695_read_current(uint16_t *current){
 
 void BQ7695_setup_corrections(int8_t *gc, int8_t *oc){
 	uint8_t i =0;
-	while(i<8){
+	while(i<7){
 		gc[i] = BQ7695_read_gain_corr(i);
 		oc[i] = BQ7695_read_offset_corr(i);
 		i++;
