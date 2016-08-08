@@ -1,5 +1,6 @@
 #include <chip.h>
 #include <BQ7695.h>
+#include <board.h>
 
 uint8_t rx_buf[10];
 uint8_t tx;
@@ -17,7 +18,7 @@ uint8_t BQ7695_set_cell(uint8_t cell){
 }
 
 uint8_t BQ7695_disable_unecessary(){
-	uint8_t power = 0x40; // Everything disabled
+	uint8_t power = 0x45; // Everything disabled
 	BQ7695_Write(I2C_ADDRESS_POWER_CTL, &power);
 	BQ7695_Read(I2C_ADDRESS_POWER_CTL, rx_buf);
 	return rx_buf[0];
@@ -140,8 +141,8 @@ static inline void readCell(uint16_t *cell){
 void BQ7695_read_cells(uint16_t *cells){
 	uint8_t i = 0;
 	while(i<7){
-		BQ7695_set_cell(++i);		
-		readCell(&(cells[i]));		
+		Board_UART_PrintNum(BQ7695_set_cell(++i),2,true);
+		readCell(&(cells[i]));
 	}
 }
 

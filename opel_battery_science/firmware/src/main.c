@@ -47,7 +47,7 @@ static inline void print_cells(void){
 		Board_UART_PrintNum(i,10,false);
 		Board_UART_Print(": ");
 //		Board_UART_PrintNum(((((3.3*cellVolts[i++]*1000)/1023)+oc[i])*(1+gc[i]))/gc[i],10,false);
-		Board_UART_PrintNum(3.3*cellVolts[i++]*1000/512, 10, false);
+		Board_UART_PrintNum((3.3*cellVolts[i++]*1000)/1023, 10, false);
 		Board_UART_Println("]");
 	}
 }
