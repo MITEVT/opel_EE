@@ -1,0 +1,264 @@
+EESchema Schematic File Version 2
+LIBS:power
+LIBS:device
+LIBS:transistors
+LIBS:conn
+LIBS:linear
+LIBS:regul
+LIBS:74xx
+LIBS:cmos4000
+LIBS:adc-dac
+LIBS:memory
+LIBS:xilinx
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
+LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
+LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
+LIBS:MITEVT_relay
+LIBS:MITEVT_power
+LIBS:MITEVT_mcontrollers
+LIBS:MITEVT_interface
+LIBS:MITEVT_REG
+LIBS:MITEVT_OPTO
+LIBS:MITEVT_CONTACTORS
+LIBS:MITEVT_ANALOG
+LIBS:battery_science-cache
+EELAYER 25 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 4 4
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L SN74LV4051ADR U3
+U 1 1 57AA63E4
+P 5100 3200
+AR Path="/57AA3B42/57AA5BCD/57AA63E4" Ref="U3"  Part="1" 
+AR Path="/57AA9BB7/57AA63E4" Ref="U3"  Part="1" 
+F 0 "U3" H 5400 3750 60  0000 C CNN
+F 1 "SN74LV4051ADR" H 4900 3750 60  0000 C CNN
+F 2 "Housings_SOIC:SOIC-16_3.9x9.9mm_Pitch1.27mm" H 5100 3200 60  0001 C CNN
+F 3 "" H 5100 3200 60  0000 C CNN
+	1    5100 3200
+	1    0    0    -1  
+$EndComp
+$Comp
+L CONN_01X05 P7
+U 1 1 57AA63EB
+P 4050 3000
+AR Path="/57AA3B42/57AA5BCD/57AA63EB" Ref="P7"  Part="1" 
+AR Path="/57AA9BB7/57AA63EB" Ref="P7"  Part="1" 
+F 0 "P7" H 4050 3300 50  0000 C CNN
+F 1 "CONN_01X05" V 4150 3000 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x05" H 4050 3000 50  0001 C CNN
+F 3 "" H 4050 3000 50  0000 C CNN
+	1    4050 3000
+	-1   0    0    1   
+$EndComp
+NoConn ~ 4400 3500
+NoConn ~ 4400 3600
+NoConn ~ 4400 3400
+$Comp
+L GND #PWR?
+U 1 1 57AA63FB
+P 5950 3850
+AR Path="/57AA3B42/57AA5BCD/57AA63FB" Ref="#PWR?"  Part="1" 
+AR Path="/57AA9BB7/57AA63FB" Ref="#PWR026"  Part="1" 
+F 0 "#PWR026" H 5950 3600 50  0001 C CNN
+F 1 "GND" H 5950 3700 50  0000 C CNN
+F 2 "" H 5950 3850 50  0000 C CNN
+F 3 "" H 5950 3850 50  0000 C CNN
+	1    5950 3850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5750 2750 5950 2750
+Wire Wire Line
+	5750 2900 5950 2900
+Wire Wire Line
+	5750 3000 5950 3000
+Wire Wire Line
+	5750 3100 5950 3100
+Wire Wire Line
+	5750 3250 5950 3250
+Wire Wire Line
+	5750 3600 5950 3600
+Wire Wire Line
+	5950 3600 5950 3850
+Wire Wire Line
+	5950 3700 5750 3700
+Connection ~ 5950 3700
+Wire Wire Line
+	4400 2900 4250 2900
+Wire Wire Line
+	4400 3000 4250 3000
+Wire Wire Line
+	4400 3100 4250 3100
+Wire Wire Line
+	4400 3300 4250 3300
+Wire Wire Line
+	6200 3400 6500 3400
+Wire Wire Line
+	6200 3400 6200 3450
+Wire Wire Line
+	6500 3400 6500 3450
+Connection ~ 6350 3400
+$Comp
+L C_Small C16
+U 1 1 57AA6412
+P 6200 3550
+AR Path="/57AA3B42/57AA5BCD/57AA6412" Ref="C16"  Part="1" 
+AR Path="/57AA9BB7/57AA6412" Ref="C16"  Part="1" 
+F 0 "C16" H 6210 3620 50  0000 L CNN
+F 1 "1μF" H 6210 3470 50  0000 L CNN
+F 2 "Capacitors_SMD:C_0805_HandSoldering" H 6200 3550 50  0001 C CNN
+F 3 "" H 6200 3550 50  0000 C CNN
+	1    6200 3550
+	1    0    0    -1  
+$EndComp
+$Comp
+L C_Small C17
+U 1 1 57AA6419
+P 6500 3550
+AR Path="/57AA3B42/57AA5BCD/57AA6419" Ref="C17"  Part="1" 
+AR Path="/57AA9BB7/57AA6419" Ref="C17"  Part="1" 
+F 0 "C17" H 6510 3620 50  0000 L CNN
+F 1 ".1μF" H 6510 3470 50  0000 L CNN
+F 2 "Capacitors_SMD:C_0603_HandSoldering" H 6500 3550 50  0001 C CNN
+F 3 "" H 6500 3550 50  0000 C CNN
+	1    6500 3550
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6200 3650 6200 3700
+Wire Wire Line
+	6200 3700 6500 3700
+Wire Wire Line
+	6500 3700 6500 3650
+Wire Wire Line
+	6350 3700 6350 3800
+Connection ~ 6350 3700
+$Comp
+L GND #PWR?
+U 1 1 57AA6425
+P 6350 3800
+AR Path="/57AA3B42/57AA5BCD/57AA6425" Ref="#PWR?"  Part="1" 
+AR Path="/57AA9BB7/57AA6425" Ref="#PWR027"  Part="1" 
+F 0 "#PWR027" H 6350 3550 50  0001 C CNN
+F 1 "GND" H 6350 3650 50  0000 C CNN
+F 2 "" H 6350 3800 50  0000 C CNN
+F 3 "" H 6350 3800 50  0000 C CNN
+	1    6350 3800
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6050 3300 6550 3300
+Wire Wire Line
+	6050 3300 6050 3450
+Wire Wire Line
+	6050 3450 5750 3450
+Wire Wire Line
+	6350 3300 6350 3400
+Connection ~ 6350 3300
+Wire Wire Line
+	4250 3300 4250 3200
+Wire Wire Line
+	4400 3200 4350 3200
+Wire Wire Line
+	4350 3200 4350 2800
+Wire Wire Line
+	4350 2800 4250 2800
+Wire Wire Line
+	6550 3300 6550 3200
+$Comp
+L +3.3V #PWR?
+U 1 1 57AA648B
+P 6550 3200
+AR Path="/57AA3B42/57AA5BCD/57AA648B" Ref="#PWR?"  Part="1" 
+AR Path="/57AA9BB7/57AA648B" Ref="#PWR028"  Part="1" 
+F 0 "#PWR028" H 6550 3050 50  0001 C CNN
+F 1 "+3.3V" H 6550 3340 50  0000 C CNN
+F 2 "" H 6550 3200 50  0000 C CNN
+F 3 "" H 6550 3200 50  0000 C CNN
+	1    6550 3200
+	1    0    0    -1  
+$EndComp
+$Comp
+L CONN_01X05 P8
+U 1 1 57AA6A01
+P 8050 3300
+AR Path="/57AA3B42/57AA5BCD/57AA6A01" Ref="P8"  Part="1" 
+AR Path="/57AA9BB7/57AA6A01" Ref="P8"  Part="1" 
+F 0 "P8" H 8050 3600 50  0000 C CNN
+F 1 "CONN_01X05" V 8150 3300 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x05" H 8050 3300 50  0001 C CNN
+F 3 "" H 8050 3300 50  0000 C CNN
+	1    8050 3300
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	8250 3100 8400 3100
+Wire Wire Line
+	8400 3100 8400 3500
+Wire Wire Line
+	8250 3200 8400 3200
+Connection ~ 8400 3200
+Wire Wire Line
+	8250 3300 8400 3300
+Connection ~ 8400 3300
+Wire Wire Line
+	8250 3400 8400 3400
+Connection ~ 8400 3400
+Wire Wire Line
+	8250 3500 8600 3500
+Wire Wire Line
+	8600 3500 8600 3600
+Connection ~ 8400 3500
+$Comp
+L GND #PWR?
+U 1 1 57AA6A13
+P 8600 3600
+AR Path="/57AA3B42/57AA5BCD/57AA6A13" Ref="#PWR?"  Part="1" 
+AR Path="/57AA9BB7/57AA6A13" Ref="#PWR029"  Part="1" 
+F 0 "#PWR029" H 8600 3350 50  0001 C CNN
+F 1 "GND" H 8600 3450 50  0000 C CNN
+F 2 "" H 8600 3600 50  0000 C CNN
+F 3 "" H 8600 3600 50  0000 C CNN
+	1    8600 3600
+	1    0    0    -1  
+$EndComp
+Text Notes 7750 2950 0    60   ~ 0
+Thermistor To Ground
+Text HLabel 5950 2750 2    60   BiDi ~ 0
+COM
+Text HLabel 5950 2900 2    60   Input ~ 0
+A
+Text HLabel 5950 3000 2    60   Input ~ 0
+B
+Text HLabel 5950 3100 2    60   Input ~ 0
+C
+Text HLabel 5950 3250 2    60   Input ~ 0
+INH
+$EndSCHEMATC
