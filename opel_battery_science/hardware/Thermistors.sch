@@ -208,9 +208,9 @@ Wire Wire Line
 	3550 2300 3150 2300
 Text HLabel 3150 2300 0    60   Input ~ 0
 VREF
-Text HLabel 2700 3100 0    60   Input ~ 0
+Text HLabel 2700 2850 0    60   Input ~ 0
 VCOUT
-Text HLabel 2700 3200 0    60   Input ~ 0
+Text HLabel 2700 3050 0    60   Input ~ 0
 VIOUT
 Text HLabel 6500 2000 2    60   Input ~ 0
 START
@@ -267,18 +267,6 @@ Wire Wire Line
 	3450 3250 3450 3150
 Wire Wire Line
 	3450 3150 3550 3150
-Wire Wire Line
-	3550 2950 3100 2950
-Wire Wire Line
-	3100 2950 3100 3100
-Wire Wire Line
-	3100 3100 2700 3100
-Wire Wire Line
-	3550 3050 3200 3050
-Wire Wire Line
-	3200 3050 3200 3200
-Wire Wire Line
-	3200 3200 2700 3200
 NoConn ~ 3550 2500
 NoConn ~ 3550 2600
 $Comp
@@ -333,19 +321,23 @@ Wire Wire Line
 Wire Wire Line
 	6200 2350 5550 2350
 Connection ~ 7000 2250
-Wire Wire Line
-	3550 2850 2100 2850
-Wire Wire Line
-	2100 2850 2100 3000
 $Comp
-L GND #PWR?
+L GND #PWR035
 U 1 1 57B323A4
-P 2100 3000
-F 0 "#PWR?" H 2100 2750 50  0001 C CNN
-F 1 "GND" H 2100 2850 50  0000 C CNN
-F 2 "" H 2100 3000 50  0000 C CNN
-F 3 "" H 2100 3000 50  0000 C CNN
-	1    2100 3000
+P 2250 3050
+F 0 "#PWR035" H 2250 2800 50  0001 C CNN
+F 1 "GND" H 2250 2900 50  0000 C CNN
+F 2 "" H 2250 3050 50  0000 C CNN
+F 3 "" H 2250 3050 50  0000 C CNN
+	1    2250 3050
 	1    0    0    -1  
 $EndComp
+Wire Wire Line
+	3550 2850 2700 2850
+Wire Wire Line
+	3550 3050 2700 3050
+Wire Wire Line
+	2250 2950 2250 3050
+Wire Wire Line
+	3550 2950 2250 2950
 $EndSCHEMATC
