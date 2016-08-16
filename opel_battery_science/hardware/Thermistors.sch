@@ -267,7 +267,6 @@ Wire Wire Line
 	3450 3250 3450 3150
 Wire Wire Line
 	3450 3150 3550 3150
-NoConn ~ 3550 2850
 Wire Wire Line
 	3550 2950 3100 2950
 Wire Wire Line
@@ -334,4 +333,19 @@ Wire Wire Line
 Wire Wire Line
 	6200 2350 5550 2350
 Connection ~ 7000 2250
+Wire Wire Line
+	3550 2850 2100 2850
+Wire Wire Line
+	2100 2850 2100 3000
+$Comp
+L GND #PWR?
+U 1 1 57B323A4
+P 2100 3000
+F 0 "#PWR?" H 2100 2750 50  0001 C CNN
+F 1 "GND" H 2100 2850 50  0000 C CNN
+F 2 "" H 2100 3000 50  0000 C CNN
+F 3 "" H 2100 3000 50  0000 C CNN
+	1    2100 3000
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
