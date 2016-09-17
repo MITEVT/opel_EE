@@ -41,7 +41,7 @@ EELAYER 25 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 1 4
+Sheet 1 5
 Title ""
 Date ""
 Rev ""
@@ -164,4 +164,10 @@ NoConn ~ 6800 3700
 NoConn ~ 6800 3800
 NoConn ~ 6400 3800
 NoConn ~ 6400 3700
+$Sheet
+S 2300 850  1750 950 
+U 57DDC043
+F0 "powerSupplies" 60
+F1 "powerSupplies.sch" 60
+$EndSheet
 $EndSCHEMATC
