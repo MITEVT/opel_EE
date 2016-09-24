@@ -141,7 +141,7 @@ static inline void readCell(uint16_t *cell){
 void BQ7695_read_cells(uint16_t *cells){
 	uint8_t i = 0;
 	while(i<7){
-		Board_UART_PrintNum(BQ7695_set_cell(++i),2,true);
+		BQ7695_set_cell(++i);
 		readCell(&(cells[i]));
 	}
 }

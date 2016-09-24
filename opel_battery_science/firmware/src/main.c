@@ -1,5 +1,6 @@
 #include "board.h"
 #include "BQ7695.h"
+#include <stdio.h>
 
 // -------------------------------------------------------------
 // Macro Definitions
@@ -27,7 +28,6 @@ static uint16_t cellVolts[8];
 static uint8_t data[10];
 static int8_t gc[7];
 static int8_t oc[7];
-
 // -------------------------------------------------------------
 // Helper Functions
 
@@ -52,6 +52,7 @@ static inline void print_cells(void){
 		Board_UART_Println("]");
 	}
 }
+
 // -------------------------------------------------------------
 // Interrupt Service Routines
 
@@ -103,20 +104,22 @@ int main(void)
 	BQ7695_setup_corrections(gc,oc);
 
 	int i = 0;
-	while(i<7){
-		Board_UART_PrintNum(gc[i],10,true);
-		Board_UART_PrintNum(oc[i++],10,true);
-	}
+//	while(i<7){
+//		Board_UART_PrintNum(gc[i],10,true);
+//		Board_UART_PrintNum(oc[i++],10,true);
+//	}
 
 	msTicks = 1000;
 	lastPrint = msTicks;
-
+	
 	while (1) {
 
 		if(lastPrint < msTicks-1000){
 			lastPrint = msTicks;
-			BQ7695_read_cells(cellVolts);	
-			Board_UART_PrintNum(msTicks,10,true);
+			BQ7695_read_cells(cellVolts);
+			Board_UART_Print("[msTicks : ");	
+			Board_UART_PrintNum(msTicks,10,false);
+			Board_UART_Println("]");
 			print_cells();
 		}
 		uint8_t count;
