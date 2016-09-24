@@ -16,9 +16,6 @@
 [submodule "opel_velocity_interface"]
 	path = opel_velocity_interface
 	url = https://github.com/MITEVT/opel_velocity_interface.git
-[submodule "opel_battery_science"]
-	path = opel_battery_science
-	url = https://github.com/MITEVT/opel_battery_science.git
 [submodule "EVT_KICAD_LIBS"]
 	path = EVT_KICAD_LIBS
 	url = https://github.com/MITEVT/EVT_KICAD_LIBS.git
@@ -34,3 +31,6 @@
 [submodule "opel_power_distribution_monitor"]
 	path = opel_power_distribution_monitor
 	url = https://github.com/MITEVT/opel_power_distribution_monitor.git
+[submodule "opel_battery_science"]
+	path = opel_battery_science
+	url = https://github.com/MITEVT/opel_battery_science
