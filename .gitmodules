@@ -34,3 +34,6 @@
 [submodule "opel_battery_science"]
 	path = opel_battery_science
 	url = https://github.com/MITEVT/opel_battery_science
+[submodule "opel_fake_DI"]
+	path = opel_fake_DI
+	url = https://github.com/MITEVT/opel_fake_DI
