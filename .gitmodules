@@ -37,3 +37,6 @@
 [submodule "opel_fake_DI"]
 	path = opel_fake_DI
 	url = https://github.com/MITEVT/opel_fake_DI
+[submodule "ltc-battery-controller"]
+	path = ltc-battery-controller
+	url = https://github.com/MITEVT/ltc-battery-controller.git
