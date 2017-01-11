@@ -40,3 +40,6 @@
 [submodule "ltc-battery-controller"]
 	path = ltc-battery-controller
 	url = https://github.com/MITEVT/ltc-battery-controller.git
+[submodule "Unity"]
+	path = Unity
+	url = https://github.com/ThrowTheSwitch/Unity.git
