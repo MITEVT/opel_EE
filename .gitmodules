@@ -43,3 +43,6 @@
 [submodule "Unity"]
 	path = Unity
 	url = https://github.com/ThrowTheSwitch/Unity.git
+[submodule "psychic-guacamole"]
+	path = psychic-guacamole
+	url = https://github.com/mitevt/psychic-guacamole
